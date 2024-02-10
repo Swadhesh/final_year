@@ -1,0 +1,129 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Page</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #ffffff;
+    }
+
+    form {
+      background-color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0;
+      color: #ffffff;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      background-color: #444;
+      border: 1px solid #666;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .error {
+      color: #ff4444;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  
+  <form id="registrationForm" action="http://localhost:4500/register" method="post">
+    <h1>Registration</h1>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <p class="error" id="emailError"></p>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Check email validation
+      const emailError = document.getElementById('emailError');
+      if (!email.endsWith('@student.tce.edu')) {
+        emailError.textContent = 'Please use a valid student email address ending with @student.tce.edu.';
+        return;
+      } else {
+        emailError.textContent = '';
+      }
+
+      // Send registration data to the server
+      const response = await fetch('http://localhost:4500/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
+      // Display the server response
+      const result = await response.text();
+      
+      alert(result);
+      if(result){
+        window.location.href="simple-registration-app/login.html";
+      }
+    });
+  </script>
+</body>
+</html>

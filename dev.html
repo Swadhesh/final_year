@@ -1,0 +1,104 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEV env cards</title>
+  <link rel="stylesheet" href="nav.css">
+  <link rel="stylesheet" href="dev-style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li onclick="f1()">
+                <div class="home-icon">
+                  <div class="roof">
+                    <div class="roof-edge"></div>
+                  </div>
+                  <div class="front"></div>
+                </div>
+              </li>
+              <li onclick="f2()">            
+                <div class="about-icon" >
+                  <div class="head">
+                    <div class="eyes"></div>
+                    <div class="beard"></div>
+                  </div>
+                </div>
+              </li>
+              <li onclick="f3()">
+                <div class="work-icon" >
+                  <div class="paper"></div>
+                  <div class="lines"></div>
+                  <div class="lines"></div>
+                  <div class="lines"></div>
+                </div>
+              </li>
+              <li>
+                <div class="mail-icon" onclick="f4()">
+                  <div class="mail-base">
+                    <div class="mail-top"></div>
+                  </div>
+                </div>
+              </li>
+        </ul>
+      </nav>
+    <div class="container">
+        <div class="wrapper">
+          <div class="banner-image"> </div>
+          <h1> Mern Stack</h1>
+          <label for="repoUrl">GitHub Repository URL:    </label>
+         <input type="text" id="repoUrl" placeholder="Enter Git Repo URL">
+         </div>
+         <div class="button-wrapper"> 
+         <button class="btn outline">DETAILS</button>
+           <button onclick="runMERNApp()" class="btn fill">RUN NOW</button>
+           <button class="btn outline" onclick="navigate()">VIEW APP</button>
+         </div>
+    </div>
+       <div class="container">
+        <div class="wrapper">
+          <div class="banner-image1"> </div>
+          <h1> Lamp Stack</h1>
+          <label for="repoUrl">GitHub Repository URL:    </label>
+         <input type="text" id="repoUrl" placeholder="Enter Git Repo URL">
+         </div>
+         <div class="button-wrapper"> 
+         <button class="btn outline">DETAILS</button>
+           <button class="btn fill">RUN NOW</button>
+           <button class="btn outline">VIEW APP</button>
+         </div>
+        </div>
+  <script>
+    function navigate(){
+        window.location.href="http://localhost:3000";
+    }
+    function f2(){
+        window.location.href="index.html"
+    }
+    async function runMERNApp() {
+      const repoUrl = document.getElementById('repoUrl').value;
+
+      try {
+        // Send the GitHub repository URL to the server
+        const response = await fetch('http://localhost:9000/run-app', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ repoUrl }),
+        });
+
+        if (response.ok) {
+          console.log('MERN app setup initiated!');
+        } else {
+          console.error('Error initiating MERN app setup:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error initiating MERN app setup:', error.message);
+      }
+    }
+  </script>
+</body>
+</html>

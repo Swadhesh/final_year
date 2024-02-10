@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        #fileList {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .fileCard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .fileCard:hover {
+            transform: scale(1.05);
+        }
+
+        .fileIcon {
+            width: 50px;
+            height: 50px;
+            background-color: #2196F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .fileName {
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .removeButton {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Saved Files</h1>
+    <ul id="fileList"></ul>
+
+    <script>
+        // Load saved files from local storage
+        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || [];
+
+        // Display saved files
+        const fileList = document.getElementById('fileList');
+        
+        savedFiles.forEach((file, index) => {
+            const listItem = document.createElement('li');
+            listItem.className = 'fileCard';
+            
+            const fileIcon = document.createElement('div');
+            fileIcon.className = 'fileIcon';
+            fileIcon.textContent = '📄'; // You can use any other suitable icon
+
+            const fileName = document.createElement('div');
+            fileName.className = 'fileName';
+            fileName.textContent = file.name;
+
+            const removeButton = document.createElement('button');
+            removeButton.className = 'removeButton';
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent the click event from reaching the file card
+                removeFile(index);
+            });
+
+            listItem.appendChild(fileIcon);
+            listItem.appendChild(fileName);
+            listItem.appendChild(removeButton);
+
+            listItem.addEventListener('click', () => {
+                // Redirect to the code editor with the code content displayed
+                const code = file.code;
+                localStorage.setItem('codeToLoad', code);
+                window.location.href = `index.html?code=${code}&fileName=${file.name}`;
+            });
+            
+            fileList.appendChild(listItem);
+        });
+
+        // Function to remove a file
+        function removeFile(index) {
+            savedFiles.splice(index, 1);
+            localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
+            // Refresh the UI
+            fileList.innerHTML = '';
+            savedFiles.forEach((file, i) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'fileCard';
+                
+                const fileIcon = document.createElement('div');
+                fileIcon.className = 'fileIcon';
+                fileIcon.textContent = '📄'; // You can use any other suitable icon
+
+                const fileName = document.createElement('div');
+                fileName.className = 'fileName';
+                fileName.textContent = file.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.className = 'removeButton';
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent the click event from reaching the file card
+                    removeFile(i);
+                });
+
+                listItem.appendChild(fileIcon);
+                listItem.appendChild(fileName);
+                listItem.appendChild(removeButton);
+
+                listItem.addEventListener('click', () => {
+                    // Redirect to the code editor with the code content displayed
+                    const code = file.code;
+                    localStorage.setItem('codeToLoad', code);
+                    window.location.href = `index.html?code=${code}&fileName=${file.name}`;
+                });
+                
+                fileList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>

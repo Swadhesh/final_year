@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+body{
+  /* solid background */
+  background: rgb(0,212,255);
+  
+  /* gradient background*/
+  background: linear-gradient(45deg, rgba(0,212,255,1) 0%, rgba(11,3,45,1) 100%);    
+  
+  /* photo background */
+  background-image: url(https://img.freepik.com/premium-photo/overlapped-gray-triangle-cell-wall-3d-rendering_648796-262.jpg);
+  background-size: cover;
+  background-position: center;  
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;    
+  height: 100vh;  
+}
+
+.container {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(17, 25, 40, 0.25);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);  
+    padding: 38px;  
+    filter: drop-shadow(0 30px 10px rgba(0,0,0,0.125));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    max-width: 400px; /* Increased max-width to fit the buttons */
+    margin: 0 auto; /* Center the container horizontally */
+  }
+  
+  .container .button-wrapper {
+    margin-top: 24px; /* Adjusted margin-top for better spacing */
+    display: flex;
+    flex-direction: column; /* Changed to column layout */
+    align-items: center; /* Center align buttons */
+  }
+  
+  .container .btn {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px; /* Increased font size for better readability */
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-bottom: 10px; /* Added margin-bottom for button spacing */
+  }
+  
+
+.container .banner-image {
+  background-image: url(https://www.logicraysacademy.com/blog/wp-content/uploads/2023/05/MVM1-1.png);
+  background-position: center;
+  background-size: cover;
+  height: 300px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255, 0.255)
+}
+.container .banner-image1 {
+  background-image: url(https://evincedev.com/assets/image/main-image/full-stack/Lamp_Stack_Development.jpg);
+  background-position: center;
+  background-size: cover;
+  height: 300px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255, 0.255)
+}
+/* GitHub Repository URL Label Styling */
+.container label[for="repoUrl"] {
+  color: rgba(255, 255, 255, 0.9); /* Adjusted color for better visibility */
+  font-family: 'Righteous', sans-serif;
+  text-transform: uppercase;
+  font-size: 1rem; /* Increased font size for better readability */
+  margin-top: 24px; /* Increased margin-top for better spacing */
+  display: block; /* Ensures each label is on its own line */
+  margin-bottom: 8px; /* Added margin-bottom for better spacing between label and input */
+}
+
+
+/* GitHub Repository URL Input Field Styling */
+#repoUrl {
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 0.8rem; /* Adjust font size to match other buttons */
+  font-family: 'Lato', sans-serif; /* Use the same font-family as other text */
+  margin-top: 8px; /* Adjust margin-top to match other buttons */
+  background-color: rgba(255, 255, 255, 0.5); /* Adjust background color as needed */
+  color: rgba(0, 0, 0, 0.9); /* Adjust text color as needed */
+}
+
+.container h1{
+  font-family: 'Righteous', sans-serif;
+  color: rgba(255,255,255,0.98);
+  text-transform: uppercase;
+  font-size: 2.4rem;
+}
+
+.container p {
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  font-size: 0.8rem;
+  line-height: 150%;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.container .btn + .btn {
+  margin-left: 10px;
+}
+
+.container .outline {
+  background: transparent;
+  color: rgba(0, 212, 255, 0.9);
+  border: 1px solid rgba(0, 212, 255, 0.6);
+  transition: all .3s ease;
+  
+}
+
+.container .outline:hover{
+  transform: scale(1.125);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+  transition: all .3s ease;  
+}
+
+.container .fill {
+  background: rgba(0, 212, 255, 0.9);
+  color: rgba(255,255,255,0.95);
+  filter: drop-shadow(0);
+  font-weight: bold;
+  transition: all .3s ease; 
+}
+
+.container .fill:hover{
+  transform: scale(1.125);  
+  border-color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 10px 5px rgba(0,0,0,0.125));
+  transition: all .3s ease;    
+}
+
+/* Nav */

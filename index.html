@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Environment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="codemirror-5.65.16/lib/codemirror.css">
+    <script src="codemirror-5.65.16/lib/codemirror.js"></script>
+    <script src="codemirror-5.65.16/mode/clike/clike.js"></script>
+    <link rel="stylesheet" href="codemirror-5.65.16/theme/dracula.css">
+    <script src="codemirror-5.65.16/addon/edit/closebrackets.js"></script>
+    <link rel="stylesheet" href="codemirror-5.65.16/theme/material-darker.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="nav.css">
+    <script src="codemirror-5.65.16/mode/python/python.js"></script>
+
+    <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+    <script src="node_modules/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js" integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+</head>
+<body class="app">
+    <!-- <div id="mySidebar" class="w3-sidebar">
+        <a href="javascript:void(0)" class="w3-bar-item w3-button" onclick="toggleSidebar()" style="color: crimson;">CLOSE MENU</a>
+        <a href="#">Home</a>
+        <a href="#">Compiler Environment</a>
+        <a href="#">Saved Files</a>
+        <a href="#">Dev Environment</a>
+    </div>
+    <button class="btn btn-primary" onclick="toggleSidebar()">☰ Menu</button> -->
+    <nav>
+        <ul>
+          <li onclick="f1()">
+            <div class="home-icon">
+              <div class="roof">
+                <div class="roof-edge"></div>
+              </div>
+              <div class="front"></div>
+            </div>
+          </li>
+          <li onclick="f2()">            
+            <div class="about-icon" >
+              <div class="head">
+                <div class="eyes"></div>
+                <div class="beard"></div>
+              </div>
+            </div>
+          </li>
+          <li onclick="f3()">
+            <div class="work-icon" >
+              <div class="paper"></div>
+              <div class="lines"></div>
+              <div class="lines"></div>
+              <div class="lines"></div>
+            </div>
+          </li>
+          <li>
+            <div class="mail-icon" onclick="f4()">
+              <div class="mail-base">
+                <div class="mail-top"></div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    <div class="row m-3">
+  <div class="col">
+    <div class="d-flex justify-content-between mb-2">
+        <div class="col-12 w-25">
+            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+            <select class="form-select" id="LangSelect" onchange="selectEnvironment(this.value)">
+              <option selected>Choose Language</option>
+              <option value="python">Python</option>
+              <option value="c">C</option>
+              <option value="openjdk">Java</option>
+            </select>
+          </div>
+          <div>
+            <h3 style="color: white;">COMPILER ENVIRONMENT USING DOCKER</h3>
+          </div>
+          <div>
+            <button type="button" class="btn btn-success" onclick="savedFileredir()">View Saved</button>
+            <button type="button" class="btn btn-warning" onclick="saveCodeLocally()">Save</button>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click()">File Upload</button>
+            <input type="file" id="fileInput" style="display: none" onchange="handleFileChange(this)" accept=".c, .java, .py">
+            <button type="button" class="btn btn-success" onclick="runCode()"><i class="bi bi-play-fill"></i></button>
+          </div>
+    </div>
+    <div class="editor-container">
+        <textarea type="text" id="editor" class="form-control"></textarea>
+    </div>
+    <br>
+    <h5 style="color: white;"><u>PSEUDO-TERMINAL:</u></h5>
+    <br>
+    <div id="terminal"></div>
+  </div>
+</div>
+</body>
+<script>
+    const socket=io("http://192.168.0.2:6501");
+    const term=new Terminal();
+    function createTerminal() {
+      const terminalContainer = document.getElementById('terminal');
+      term.open(terminalContainer);
+      term.write('---------------Welcome to the pseudo-terminal!---------------\r\n\r\n');
+      term.focus();
+      term.write('\n\x1b[2K\r\u001b[32mSwad> \u001b[37m'); 
+      let inputBuffer = ''; // Variable to accumulate user input
+
+      term.onData((data) => {
+        if (data === '\r') {
+          // Send accumulated input to the server when Enter is pressed
+          socket.emit('input', inputBuffer);
+          inputBuffer = ''; // Clear the input buffer after sending
+          term.write('\r');
+          term.write('\n\x1b[2K\r\u001b[32mSwad> \u001b[37m');         
+        }
+        else if (data === '\x7F' || data === '\b') {
+            if (inputBuffer.length > 0) {
+            // Remove the last character from the input buffer
+            inputBuffer = inputBuffer.slice(0, -1);
+            // Move the cursor back by one position
+            term.write('\x1b[D');
+            // Clear the character at the current cursor position
+            term.write('\x1b[K');
+        }
+        } 
+        else {
+          // Accumulate other user input characters
+          inputBuffer += data;
+          // Forward other user input characters to the terminal
+          term.write(data);
+        }
+      });
+
+      socket.on('output', (data) => {
+        term.write('\r\n'+data);
+      });
+
+      socket.on('exit', () => {
+        term.write('\r\n\r\n---------------Pseudo-terminal has exited---------------\r\n');
+      });
+    }
+
+    function handleFileChange(input) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const fileContent = e.target.result;
+                // Set the code editor content with the file content
+                editor.setValue(fileContent);
+            };
+
+            reader.readAsText(file);
+        }
+    }
+
+    // Add a new function to handle saving code to local storage
+    function saveCodeLocally() {
+        const code = getCode();
+        const fileName = prompt('Enter a name for your file:');
+
+        if (!fileName || !code) {
+            alert('Please enter a valid file name and ensure there is code.');
+            return;
+        }
+
+        // Save the file to local storage
+        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || [];
+        savedFiles.push({ name: fileName, code });
+        localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
+
+        alert('Code saved successfully!');
+    }
+
+
+    createTerminal();
+
+    let selectedEnvironment=''
+    function selectEnvironment(environment) {
+      selectedEnvironment = environment;
+      console.log(`Selected environment: ${selectedEnvironment}`);
+    }
+
+    function runCode() {
+      const code = getCode();
+
+      if (!code) {
+        console.error('Code is empty.');
+        return;
+      }
+
+      if (!selectedEnvironment) {
+        console.error('No environment selected.');
+        return;
+      }
+
+      // Signal the end of input
+      socket.emit('inputEnd');
+      // Send the code to the server after setting up the input listener
+      socket.emit('runCode', { environment: selectedEnvironment, code });
+    }
+
+    var editor=CodeMirror.fromTextArea(document.getElementById("editor"),{
+        mode:"",
+        theme: "material-darker",
+        lineNumbers:true,
+        autoCloseBrackets: true
+    })
+
+    var width=window.innerWidth
+    editor.setSize(0.96*width,"500")
+    var option= document.getElementById("LangSelect");
+    option.addEventListener("change",function(){
+        if(option.value=="openjdk"){
+            editor.setOption("mode","text/x-java")
+        }
+        else if(option.value=="python"){
+            editor.setOption("mode","text/x-python")
+        }
+        else{
+            editor.setOption("mode","text/x-csrc")
+        }
+    })
+
+    function getCode() {
+      return editor.getValue();
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const codeToLoad = localStorage.getItem('codeToLoad');
+        if (codeToLoad) {
+            editor.setValue(codeToLoad);
+            localStorage.removeItem('codeToLoad'); // Remove the code from local storage after loading
+        }
+    });
+
+    // Add a new function to handle saving code to local storage
+    function saveCodeLocally() {
+        const code = getCode();
+        const fileName = prompt('Enter a name for your file:');
+
+        if (!fileName || !code) {
+            alert('Please enter a valid file name and ensure there is code.');
+            return;
+        }
+
+        // Save the file to local storage
+        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || [];
+        savedFiles.push({ name: fileName, code });
+        localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
+
+        alert('Code saved successfully!');}
+    function savedFileredir(){
+        window.location.href=`files.html`;
+    }
+    // function toggleSidebar() {
+    //         var sidebar = document.getElementById('mySidebar');
+    //         var main = document.getElementById('main');
+
+    //         if (sidebar.style.width === '250px') {
+    //             sidebar.style.width = '0';
+    //             main.style.marginLeft = '0';
+    //         } else {
+    //             sidebar.style.width = '250px';
+    //             main.style.marginLeft = '250px';
+    //         }
+    //     }
+        function f3(){
+            window.location.href="./dev.html";
+        }
+
+</script>
+</html>
