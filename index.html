@@ -25,14 +25,6 @@
 
 </head>
 <body class="app">
-    <!-- <div id="mySidebar" class="w3-sidebar">
-        <a href="javascript:void(0)" class="w3-bar-item w3-button" onclick="toggleSidebar()" style="color: crimson;">CLOSE MENU</a>
-        <a href="#">Home</a>
-        <a href="#">Compiler Environment</a>
-        <a href="#">Saved Files</a>
-        <a href="#">Dev Environment</a>
-    </div>
-    <button class="btn btn-primary" onclick="toggleSidebar()">☰ Menu</button> -->
     <nav>
         <ul>
           <li onclick="f1()">
@@ -102,7 +94,7 @@
 </div>
 </body>
 <script>
-    const socket=io("http://192.168.0.2:6501");
+    const socket=io("http://localhost:6501");
     const term=new Terminal();
     function createTerminal() {
       const terminalContainer = document.getElementById('terminal');
@@ -260,21 +252,9 @@
     function savedFileredir(){
         window.location.href=`files.html`;
     }
-    // function toggleSidebar() {
-    //         var sidebar = document.getElementById('mySidebar');
-    //         var main = document.getElementById('main');
-
-    //         if (sidebar.style.width === '250px') {
-    //             sidebar.style.width = '0';
-    //             main.style.marginLeft = '0';
-    //         } else {
-    //             sidebar.style.width = '250px';
-    //             main.style.marginLeft = '250px';
-    //         }
-    //     }
-        function f3(){
-            window.location.href="./dev.html";
-        }
+    function f3(){
+        window.location.href="./dev.html";
+    }
 
 </script>
 </html>

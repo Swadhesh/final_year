@@ -4,11 +4,13 @@ const bodyParser = require('body-parser');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
 const port = 9000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.post('/run-app', (req, res) => {
   const { repoUrl } = req.body;

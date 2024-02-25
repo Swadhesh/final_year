@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const http = require('http');
 const { spawn } = require('child_process');
@@ -12,7 +11,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(bodyParser.json());
-app.use(cors({ origin: '*' }));
+app.use(cors());
 
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -34,7 +33,7 @@ io.on('connection', (socket) => {
         rows: 30,
         cwd: process.env.HOME,
         env: process.env,
-        stdio: ['pipe', 'pipe', 'pipe'] // Add an additional pipe for user input
+        stdio: ['pipe', 'pipe', 'pipe']
       });
 
       ptyProcess.stdout.on('data', (data) => {
@@ -48,7 +47,7 @@ io.on('connection', (socket) => {
       socket.on('input', (data) => {
         // Send user input to the pseudo-terminal
         console.log("Received input",data.trim());
-        ptyProcess.stdin.write(data + '\n'); // Include a newline character to simulate pressing "Enter"
+        ptyProcess.stdin.write(data + '\n'); 
         
       });
 
@@ -79,8 +78,9 @@ function getDockerRunCommand(imageName, code, environment) {
   switch (environment) {
     case 'python':
       return ['run', '-i', '--rm', imageName, 'python', '-c', code];
-    case 'c':
-      return ['run', '-i', '--rm', imageName, '/bin/sh', '-c', `echo '${code}' > abc.c && gcc abc.c -o abc && ./abc`];
+      case 'c':
+        return ['run', '-i', '--rm', imageName, '/bin/sh', '-c', `echo '${code}' > main.c && gcc main.c -o main && ./main`];
+      case 'java':
     case 'openjdk':
       return ['run', '-i', '--rm', imageName, '/bin/sh', '-c', `echo '${code}' > Main.java && javac Main.java && java Main`];
     default:
