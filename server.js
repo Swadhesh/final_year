@@ -12,7 +12,22 @@ const io = new Server(server);
 
 app.use(bodyParser.json());
 app.use(cors());
-
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Socket.io Server</title>
+    </head>
+    <body>
+        <h1>Welcome to Socket.io Server</h1>
+        <p>This is a simple Socket.io server.</p>
+    </body>
+    </html>
+  `);
+});
 io.on('connection', (socket) => {
   console.log('A user connected');
 
