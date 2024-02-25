@@ -62,6 +62,6 @@ services:
   res.status(200).send('MERN app setup initiated!');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+app.listen('9000','0.0.0.0',()=>{
+  console.log("server is listening on 9000 port");
+})
