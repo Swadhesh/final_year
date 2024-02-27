@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
 
       const command = getDockerRunCommand(imageName, code, environment);
 
-      const ptyProcess = spawn('docker', command, {
+      const ptyProcess = spawn('sudo', ['docker', ...command], {
         name: 'xterm-color',
         cols: 80,
         rows: 30,
@@ -50,6 +50,7 @@ io.on('connection', (socket) => {
         env: process.env,
         stdio: ['pipe', 'pipe', 'pipe']
       });
+      
 
       ptyProcess.stdout.on('data', (data) => {
         socket.emit('output', data.toString());
