@@ -57,7 +57,7 @@ services:
   console.log('docker-compose.yml created');
 
   // Step 4: Build and run Docker Compose
-  execSync('docker-compose up -d --build', { stdio: 'inherit' });
+  execSync('sudo docker-compose up -d --build', { stdio: 'inherit' });
 
   res.status(200).send('MERN app setup initiated!');
 });
