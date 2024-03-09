@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 4500;
 const cors = require('cors');
 app.use(cors());
 
-// Connect to MongoDB (make sure your MongoDB server is running)
 mongoose.connect('mongodb+srv://Swadhesh:swadplac472@details.q0ysjlg.mongodb.net/Registration', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -44,8 +43,6 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/registration.html');
 });
 
-// Handle registration POST request
-// Handle registration GET and POST requests
 app.route('/register')
   .get((req, res) => {
     res.sendFile(__dirname + '/registration.html');
