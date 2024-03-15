@@ -94,7 +94,8 @@
 </div>
 </body>
 <script>
-    const socket=io("http://ec2-54-92-198-36.compute-1.amazonaws.com:6501");
+    const socket = io("http://" + await getPublicIPv4Address() + ":6501");
+
     const term=new Terminal();
     function createTerminal() {
       const terminalContainer = document.getElementById('terminal');
@@ -139,6 +140,22 @@
       });
     }
 
+    async function getPublicIPv4Address() {
+        try {
+            const response = await fetch('http://169.254.169.254/latest/meta-data/public-ipv4');
+            if (response.ok) {
+                const publicIPv4Address = await response.text();
+                return publicIPv4Address;
+            } else {
+                console.error('Failed to fetch public IPv4 address:', response.statusText);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching public IPv4 address:', error.message);
+            return null;
+        }
+    }
+
     function handleFileChange(input) {
         const file = input.files[0];
         if (file) {
@@ -154,7 +171,6 @@
         }
     }
 
-    // Add a new function to handle saving code to local storage
     function saveCodeLocally() {
         const code = getCode();
         const fileName = prompt('Enter a name for your file:');
@@ -171,7 +187,6 @@
 
         alert('Code saved successfully!');
     }
-
 
     createTerminal();
 
@@ -233,22 +248,6 @@
         }
     });
 
-    // Add a new function to handle saving code to local storage
-    function saveCodeLocally() {
-        const code = getCode();
-        const fileName = prompt('Enter a name for your file:');
-
-        if (!fileName || !code) {
-            alert('Please enter a valid file name and ensure there is code.');
-            return;
-        }
-
-        // Save the file to local storage
-        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || [];
-        savedFiles.push({ name: fileName, code });
-        localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
-
-        alert('Code saved successfully!');}
     function savedFileredir(){
         window.location.href=`files.html`;
     }
