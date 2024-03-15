@@ -96,7 +96,7 @@
             
             const fileIcon = document.createElement('div');
             fileIcon.className = 'fileIcon';
-            fileIcon.textContent = '📄'; // You can use any other suitable icon
+            fileIcon.textContent = '📄'; 
 
             const fileName = document.createElement('div');
             fileName.className = 'fileName';
@@ -106,7 +106,7 @@
             removeButton.className = 'removeButton';
             removeButton.textContent = 'Remove';
             removeButton.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent the click event from reaching the file card
+                event.stopPropagation(); 
                 removeFile(index);
             });
 
@@ -115,7 +115,6 @@
             listItem.appendChild(removeButton);
 
             listItem.addEventListener('click', () => {
-                // Redirect to the code editor with the code content displayed
                 const code = file.code;
                 localStorage.setItem('codeToLoad', code);
                 window.location.href = `index.html?code=${code}&fileName=${file.name}`;
@@ -123,8 +122,7 @@
             
             fileList.appendChild(listItem);
         });
-
-        // Function to remove a file
+        
         function removeFile(index) {
             savedFiles.splice(index, 1);
             localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
