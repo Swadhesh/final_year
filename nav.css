@@ -12,17 +12,6 @@ section {
   left: 100px;
 }
 
-/* body {
-  padding: 100px 0;
-	background: lightblue;
-  color: white;
-  max-width:640px;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 14px;
-  line-height:1.4;
-  font-smoothing: anti-aliased;
-}
- */
  nav {
   position: fixed; /* Fix the position of the nav bar */
   top: 50%; /* Adjust as needed */

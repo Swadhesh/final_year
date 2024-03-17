@@ -61,11 +61,11 @@
           <div class="banner-image1"> </div>
           <h1> Lamp Stack</h1>
           <label for="repoUrl">GitHub Repository URL:    </label>
-         <input type="text" id="repoUrl" placeholder="Enter Git Repo URL">
+         <input type="text" id="repoUrl2" placeholder="Enter Git Repo URL">
          </div>
          <div class="button-wrapper"> 
          <button class="btn outline">DETAILS</button>
-           <button class="btn fill">RUN NOW</button>
+           <button onclick="runMEANApp()" class="btn fill">RUN NOW</button>
            <button class="btn outline">VIEW APP</button>
          </div>
         </div>
@@ -82,6 +82,27 @@
 
       try {
         const response = await fetch('http://ec2-34-195-133-61.compute-1.amazonaws.com:9000/run-app', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ repoUrl }),
+        });
+
+        if (response.ok) {
+          console.log('MERN app setup initiated!');
+        } else {
+          console.error('Error initiating MERN app setup:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error initiating MERN app setup:', error.message);
+      }
+    }
+    async function runMEANApp() {
+      const repoUrl = document.getElementById('repoUrl2').value;
+
+      try {
+        const response = await fetch('http://localhost:9000/run-mean', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
