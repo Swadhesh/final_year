@@ -104,9 +104,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on("codeChange", (roomId, updatedCode) => {
-    // Update the shared code state for the specified room
-    rooms[roomId].code = updatedCode;
-
     // Broadcast the updated code to all clients in the same room
     io.to(roomId).emit("codeUpdate", updatedCode);
   });
