@@ -9,6 +9,7 @@ const app = express();
 const server = http.createServer(app);
 // const server = http.createServer(app).listen(port, '0.0.0.0');
 const io = new Server(server);
+const rooms = {};
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -101,7 +102,7 @@ io.on('connection', (socket) => {
       rooms[roomId].push(socket);
       console.log(`User joined room ${roomId}`);
   });
-  
+
   socket.on("codeChange", (roomId, updatedCode) => {
     // Update the shared code state for the specified room
     rooms[roomId].code = updatedCode;
