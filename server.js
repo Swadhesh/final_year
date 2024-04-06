@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
     </html>
   `);
 });
+
 io.on('connection', (socket) => {
   console.log('A user connected');
 
@@ -81,9 +82,46 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
+  socket.on("createRoom", () => {
+    const roomId = generateRoomId();
+    socket.emit("roomCreated", roomId);
+    socket.join(roomId);
+    if (!rooms[roomId]) {
+        rooms[roomId] = [];
+    }
+    rooms[roomId].push(socket);
+    console.log(`User created and joined room ${roomId}`);
   });
+
+  socket.on("joinRoom", roomId => {
+      socket.join(roomId);
+      if (!rooms[roomId]) {
+          rooms[roomId] = [];
+      }
+      rooms[roomId].push(socket);
+      console.log(`User joined room ${roomId}`);
+  });
+  
+  socket.on("codeChange", (roomId, updatedCode) => {
+    // Update the shared code state for the specified room
+    rooms[roomId].code = updatedCode;
+
+    // Broadcast the updated code to all clients in the same room
+    io.to(roomId).emit("codeUpdate", updatedCode);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+    Object.keys(socket.rooms).forEach(roomId => {
+        if (rooms[roomId]) {
+            rooms[roomId] = rooms[roomId].filter(s => s !== socket);
+            if (rooms[roomId].length === 0) {
+                delete rooms[roomId];
+            }
+        }
+    });
+  });
+
 });
 
 server.listen(port, () => {
@@ -115,4 +153,8 @@ function getDockerImageName(environment) {
     default:
       return null;
   }
+}
+
+function generateRoomId() {
+  return Math.random().toString(36).substring(2, 6);
 }

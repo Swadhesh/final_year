@@ -59,19 +59,23 @@
        <div class="container">
         <div class="wrapper">
           <div class="banner-image1"> </div>
-          <h1> Lamp Stack</h1>
-          <label for="repoUrl">GitHub Repository URL:    </label>
+          <h1> Mean Stack</h1>
+          <label for="repoUrl">GitHub Repository URL:  </label>
          <input type="text" id="repoUrl2" placeholder="Enter Git Repo URL">
          </div>
          <div class="button-wrapper"> 
          <button class="btn outline">DETAILS</button>
            <button onclick="runMEANApp()" class="btn fill">RUN NOW</button>
-           <button class="btn outline">VIEW APP</button>
+           <button class="btn outline" onclick="navigate2()">VIEW APP</button>
          </div>
         </div>
   <script>
+
     function navigate(){
         window.location.href="http://ec2-34-195-133-61.compute-1.amazonaws.com:3000";
+    }
+    function navigate2(){
+        window.location.href="http://ec2-34-195-133-61.compute-1.amazonaws.com:4200";
     }
     function f2(){
         window.location.href="index.html"
@@ -94,15 +98,17 @@
         } else {
           console.error('Error initiating MERN app setup:', response.statusText);
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error initiating MERN app setup:', error.message);
       }
     }
+
     async function runMEANApp() {
       const repoUrl = document.getElementById('repoUrl2').value;
 
       try {
-        const response = await fetch('http://localhost:9000/run-mean', {
+        const response = await fetch('http://ec2-34-195-133-61.compute-1.amazonaws.com:9000/run-mean', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -115,7 +121,8 @@
         } else {
           console.error('Error initiating MERN app setup:', response.statusText);
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error initiating MERN app setup:', error.message);
       }
     }

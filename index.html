@@ -82,6 +82,11 @@
             <input type="file" id="fileInput" style="display: none" onchange="handleFileChange(this)" accept=".c, .java, .py">
             <button type="button" class="btn btn-success" onclick="runCode()"><i class="bi bi-play-fill"></i></button>
           </div>
+          <div>
+            <button id="createRoomBtn">Create Room</button>
+            <input type="text" id="joinRoomInput" placeholder="Enter Room ID">
+            <button id="joinRoomBtn">Join Room</button>
+          </div>
     </div>
     <div class="editor-container">
         <textarea type="text" id="editor" class="form-control"></textarea>
@@ -94,6 +99,7 @@
 </div>
 </body>
 <script>
+    
     const socket=io("http://ec2-34-195-133-61.compute-1.amazonaws.com:6501");
     const term=new Terminal();
     function createTerminal() {
@@ -255,6 +261,26 @@
     function f3(){
         window.location.href="./dev.html";
     }
+
+    function createRoom(){
+      socket.emit("createRoom")
+    }
+
+    function joinRoom(){
+      const roomId = document.getElementById('joinRoomInput').value
+      socket.emit("joinRoom",roomId)
+    }
+
+    document.getElementById("createRoomBtn").addEventListener("click", createRoom);
+    document.getElementById("joinRoomBtn").addEventListener("click", joinRoom);
+
+    socket.on("roomCreated", roomId => {
+      console.log("Room created-",roomId);
+    })
+
+    socket.on("codeUpdate", code =>{
+      editor.setValue(code);
+    })
 
 </script>
 </html>
