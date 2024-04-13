@@ -72,10 +72,10 @@
   <script>
 
     function navigate(){
-        window.location.href="http://ec2-34-195-133-61.compute-1.amazonaws.com:3000";
+        window.location.href="http://ec2-3-215-68-245.compute-1.amazonaws.com:3000";
     }
     function navigate2(){
-        window.location.href="http://ec2-34-195-133-61.compute-1.amazonaws.com:4200";
+        window.location.href="http://ec2-3-215-68-245.compute-1.amazonaws.com:4200";
     }
     function f2(){
         window.location.href="index.html"
@@ -85,7 +85,7 @@
       const repoUrl = document.getElementById('repoUrl').value;
 
       try {
-        const response = await fetch('http://ec2-34-195-133-61.compute-1.amazonaws.com:9000/run-app', {
+        const response = await fetch('http://ec2-3-215-68-245.compute-1.amazonaws.com:9000/run-app', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -106,9 +106,9 @@
 
     async function runMEANApp() {
       const repoUrl = document.getElementById('repoUrl2').value;
-
+      
       try {
-        const response = await fetch('http://ec2-34-195-133-61.compute-1.amazonaws.com:9000/run-mean', {
+        const response = await fetch('http://ec2-3-215-68-245.compute-1.amazonaws.com:9000/run-mean', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
