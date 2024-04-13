@@ -135,7 +135,7 @@ FROM nginx:alpine AS production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE ${exposePort}
 CMD ["nginx", "-g", "daemon off;"]
-      `;
+`;
     } else {
       dockerfileContent = `
 FROM node:14
@@ -145,7 +145,7 @@ RUN npm install
 COPY . .
 EXPOSE ${exposePort}
 CMD ["npm", "start"]
-      `;
+`;
     }
 
     fs.writeFileSync(path.join(folderPath, "Dockerfile"), dockerfileContent.trim());
@@ -172,7 +172,7 @@ services:
       context: ./Backend
     ports:
       - "3200:3200"
-  `;
+`;
 
   fs.writeFileSync(path.join(__dirname, "mean-appl", "docker-compose.yml"), dockerComposeContent.trim());
   console.log("docker-compose.yml created");
