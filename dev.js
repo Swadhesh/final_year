@@ -69,9 +69,21 @@ app.post('/run-mean', (req, res) => {
   execSync(`git clone ${repoUrl}`, { stdio: 'inherit' });
 
   // Step 2: Create Dockerfiles for client and server subfolders
-  const createDockerfile = (folderPath, imageName, exposePort) => {
-const dockerfileContent = `
-FROM node:14-alpine
+  const createDockerfile = (folderPath, imageName, exposePort, isFrontend = false) => {
+    let dockerfileContent;
+    if (isFrontend) {
+      dockerfileContent = `
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE ${exposePort}
+CMD ["ng", "serve", "--host", "0.0.0.0"]
+`;
+    } else {
+      dockerfileContent = `
+FROM node:14
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -79,17 +91,18 @@ COPY . .
 EXPOSE ${exposePort}
 CMD ["npm", "start"]
 `;
+    }
 
-      fs.writeFileSync(path.join(folderPath, 'Dockerfile'), dockerfileContent.trim());
-      console.log(`Dockerfile created for ${imageName}`);
+    fs.writeFileSync(path.join(folderPath, 'Dockerfile'), dockerfileContent.trim());
+    console.log(`Dockerfile created for ${imageName}`);
   };
 
   process.chdir('mean-appl');
-  createDockerfile('Frontend', 'client', 4200);
+  createDockerfile('Frontend', 'client', 4200, true);
   createDockerfile('Backend', 'server', 3200);
 
   // Step 3: Generate Docker Compose file
-const dockerComposeContent = `
+  const dockerComposeContent = `
 version: '3'
 services:
   client:
@@ -112,6 +125,7 @@ services:
 
   res.status(200).send('MEAN app setup initiated!');
 });
+
 
 app.listen('9000','0.0.0.0',()=>{
   console.log("server is listening on 9000 port");
