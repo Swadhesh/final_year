@@ -62,6 +62,57 @@ services:
   res.status(200).send('MERN app setup initiated!');
 });
 
+// app.post('/run-mean', (req, res) => {
+//   const { repoUrl } = req.body;
+
+//   // Step 1: Clone the GitHub repository
+//   execSync(`git clone ${repoUrl}`, { stdio: 'inherit' });
+
+//   // Step 2: Create Dockerfiles for client and server subfolders
+//   const createDockerfile = (folderPath, imageName, exposePort) => {
+// const dockerfileContent = `
+// FROM node:14-alpine
+// WORKDIR /app
+// COPY package*.json ./
+// RUN npm install
+// COPY . .
+// EXPOSE ${exposePort}
+// CMD ["npm", "start"]
+// `;
+
+//       fs.writeFileSync(path.join(folderPath, 'Dockerfile'), dockerfileContent.trim());
+//       console.log(`Dockerfile created for ${imageName}`);
+//   };
+
+//   process.chdir('mean-appl');
+//   createDockerfile('Frontend', 'client', 4200);
+//   createDockerfile('Backend', 'server', 3200);
+
+//   // Step 3: Generate Docker Compose file
+// const dockerComposeContent = `
+// version: '3'
+// services:
+//   client:
+//     build:
+//       context: ./Frontend
+//     ports:
+//       - "4200:4200"
+//   server:
+//     build:
+//       context: ./Backend
+//     ports:
+//       - "3200:3200"
+// `;
+
+//   fs.writeFileSync('docker-compose.yml', dockerComposeContent.trim());
+//   console.log('docker-compose.yml created');
+
+//   // Step 4: Build and run Docker Compose
+//   execSync('sudo docker-compose up -d --build', { stdio: 'inherit' });
+
+//   res.status(200).send('MEAN app setup initiated!');
+// });
+
 app.post('/run-mean', (req, res) => {
   const { repoUrl } = req.body;
 
@@ -73,18 +124,20 @@ app.post('/run-mean', (req, res) => {
     let dockerfileContent;
     if (isFrontend) {
       dockerfileContent = `
-FROM node:14
-WORKDIR /app
+FROM node:14 AS build-stage
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN npm run build --prod
+
+FROM nginx:alpine AS production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE ${exposePort}
-CMD ["npm", "run", "start"]
+CMD ["nginx", "-g", "daemon off;"]
 `;
     } else {
       dockerfileContent = `
 FROM node:14
-WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
@@ -98,7 +151,7 @@ CMD ["npm", "start"]
   };
 
   process.chdir('mean-appl');
-  createDockerfile('Frontend', 'client', 4200, true);
+  createDockerfile('Frontend', 'client', 80, true); // Exposing port 80 for NGINX
   createDockerfile('Backend', 'server', 3200);
 
   // Step 3: Generate Docker Compose file
@@ -109,7 +162,7 @@ services:
     build:
       context: ./Frontend
     ports:
-      - "4200:4200"
+      - "80:80" # Map NGINX container port to port 80 on host
   server:
     build:
       context: ./Backend
@@ -125,7 +178,6 @@ services:
 
   res.status(200).send('MEAN app setup initiated!');
 });
-
 
 
 app.listen('9000','0.0.0.0',()=>{
