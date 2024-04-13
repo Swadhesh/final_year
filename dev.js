@@ -125,6 +125,7 @@ app.post('/run-mean', (req, res) => {
     if (isFrontend) {
       dockerfileContent = `
 FROM node:14 AS build-stage
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
