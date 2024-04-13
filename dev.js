@@ -79,7 +79,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE ${exposePort}
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+CMD ["ng", "serve"]
 `;
     } else {
       dockerfileContent = `
