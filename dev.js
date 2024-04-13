@@ -113,11 +113,11 @@ services:
 //   res.status(200).send('MEAN app setup initiated!');
 // });
 
-app.post('/run-mean', (req, res) => {
+app.post("/run-mean", (req, res) => {
   const { repoUrl } = req.body;
 
   // Step 1: Clone the GitHub repository
-  execSync(`git clone ${repoUrl}`, { stdio: 'inherit' });
+  execSync(`git clone ${repoUrl}`, { stdio: "inherit" });
 
   // Step 2: Create Dockerfiles for client and server subfolders
   const createDockerfile = (folderPath, imageName, exposePort, isFrontend = false) => {
@@ -125,6 +125,7 @@ app.post('/run-mean', (req, res) => {
     if (isFrontend) {
       dockerfileContent = `
 FROM node:14 AS build-stage
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
@@ -134,7 +135,7 @@ FROM nginx:alpine AS production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE ${exposePort}
 CMD ["nginx", "-g", "daemon off;"]
-`;
+      `;
     } else {
       dockerfileContent = `
 FROM node:14
@@ -144,16 +145,18 @@ RUN npm install
 COPY . .
 EXPOSE ${exposePort}
 CMD ["npm", "start"]
-`;
+      `;
     }
 
-    fs.writeFileSync(path.join(folderPath, 'Dockerfile'), dockerfileContent.trim());
+    fs.writeFileSync(path.join(folderPath, "Dockerfile"), dockerfileContent.trim());
     console.log(`Dockerfile created for ${imageName}`);
   };
 
-  process.chdir('mean-appl');
-  createDockerfile('Frontend', 'client', 80, true); // Exposing port 80 for NGINX
-  createDockerfile('Backend', 'server', 3200);
+  const frontendFolderPath = path.join(__dirname, "mean-appl", "Frontend");
+  const backendFolderPath = path.join(__dirname, "mean-appl", "Backend");
+
+  createDockerfile(frontendFolderPath, "client", 80, true); // Exposing port 80 for NGINX
+  createDockerfile(backendFolderPath, "server", 3200);
 
   // Step 3: Generate Docker Compose file
   const dockerComposeContent = `
@@ -169,15 +172,15 @@ services:
       context: ./Backend
     ports:
       - "3200:3200"
-`;
+  `;
 
-  fs.writeFileSync('docker-compose.yml', dockerComposeContent.trim());
-  console.log('docker-compose.yml created');
+  fs.writeFileSync(path.join(__dirname, "mean-appl", "docker-compose.yml"), dockerComposeContent.trim());
+  console.log("docker-compose.yml created");
 
   // Step 4: Build and run Docker Compose
-  execSync('sudo docker-compose up -d --build', { stdio: 'inherit' });
+  execSync("sudo docker-compose up -d --build", { stdio: "inherit" });
 
-  res.status(200).send('MEAN app setup initiated!');
+  res.status(200).send("MEAN app setup initiated!");
 });
 
 
