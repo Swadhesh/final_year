@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Development Environment</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="codemirror-5.65.16/lib/codemirror.css">
     <script src="codemirror-5.65.16/lib/codemirror.js"></script>
     <script src="codemirror-5.65.16/mode/clike/clike.js"></script>
@@ -19,88 +23,107 @@
 
     <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
     <script src="node_modules/xterm/lib/xterm.js"></script>
-    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js" integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"
+        integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg"
+        crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
+
 <body class="app">
     <nav>
         <ul>
-          <li onclick="f1()">
-            <div class="home-icon">
-              <div class="roof">
-                <div class="roof-edge"></div>
-              </div>
-              <div class="front"></div>
-            </div>
-          </li>
-          <li onclick="f2()">            
-            <div class="about-icon" >
-              <div class="head">
-                <div class="eyes"></div>
-                <div class="beard"></div>
-              </div>
-            </div>
-          </li>
-          <li onclick="f3()">
-            <div class="work-icon" >
-              <div class="paper"></div>
-              <div class="lines"></div>
-              <div class="lines"></div>
-              <div class="lines"></div>
-            </div>
-          </li>
-          <li>
-            <div class="mail-icon" onclick="f4()">
-              <div class="mail-base">
-                <div class="mail-top"></div>
-              </div>
-            </div>
-          </li>
+            <li onclick="f1()">
+                <div class="home-icon">
+                    <div class="roof">
+                        <div class="roof-edge"></div>
+                    </div>
+                    <div class="front"></div>
+                </div>
+            </li>
+            <li onclick="f2()">
+                <div class="about-icon">
+                    <div class="head">
+                        <div class="eyes"></div>
+                        <div class="beard"></div>
+                    </div>
+                </div>
+            </li>
+            <li onclick="f3()">
+                <div class="work-icon">
+                    <div class="paper"></div>
+                    <div class="lines"></div>
+                    <div class="lines"></div>
+                    <div class="lines"></div>
+                </div>
+            </li>
+            <li>
+                <div class="mail-icon" onclick="f4()">
+                    <div class="mail-base">
+                        <div class="mail-top"></div>
+                    </div>
+                </div>
+            </li>
         </ul>
-      </nav>
-    <div class="row m-3">
-  <div class="col">
-    <div class="d-flex justify-content-between mb-2">
-        <div class="col-12 w-25">
-            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
-            <select class="form-select" id="LangSelect" onchange="selectEnvironment(this.value)">
-              <option selected>Choose Language</option>
-              <option value="python">Python</option>
-              <option value="c">C</option>
-              <option value="openjdk">Java</option>
-            </select>
-          </div>
-          <div>
-            <h3 style="color: white;">COMPILER ENVIRONMENT USING DOCKER</h3>
-          </div>
-          <div>
-            <button type="button" class="btn btn-success" onclick="savedFileredir()">View Saved</button>
-            <button type="button" class="btn btn-warning" onclick="saveCodeLocally()">Save</button>
-            <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click()">File Upload</button>
-            <input type="file" id="fileInput" style="display: none" onchange="handleFileChange(this)" accept=".c, .java, .py">
-            <button type="button" class="btn btn-success" onclick="runCode()"><i class="bi bi-play-fill"></i></button>
-          </div>
-          <div>
-            <button id="createRoomBtn">Create Room</button>
-            <input type="text" id="joinRoomInput" placeholder="Enter Room ID">
-            <button id="joinRoomBtn">Join Room</button>
-          </div>
+    </nav>
+    <div class="m-3">
+        <div class="flex flex-col">
+            <div class="flex items-center justify-around">
+                <div class="col-12 w-25">
+                    <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                    <select class="form-select py-3" id="LangSelect" onchange="selectEnvironment(this.value)">
+                        <option selected>Choose Language</option>
+                        <option value="python">Python</option>
+                        <option value="c">C</option>
+                        <option value="openjdk">Java</option>
+                    </select>
+                </div>
+                <div>
+                    <h3 class="text-white text-3xl font-bold">COMPILER ENVIRONMENT USING DOCKER</h3>
+                </div>
+                <div >
+                    <button type="button" class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900" onclick="savedFileredir()">View Saved</button>
+
+                    <button type="button" class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900" onclick="saveCodeLocally()"><i class="bi bi-floppy2"></i></button>
+
+                    <button type="button" class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900" onclick="document.getElementById('fileInput').click()"><i class="bi bi-file-earmark-plus"></i></button>
+                    <input type="file" id="fileInput" style="display: none" onchange="handleFileChange(this)"
+                        accept=".c, .java, .py">
+                    <button type="button" class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900" onclick="runCode()"><i
+                            class="bi bi-play-fill"></i></button>
+                </div>
+
+            </div>
+            <div class="flex pt-3 pb-3 ml-10">
+                <div class="mr-96 gap-x-2">
+                    <button class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900"
+                        id="createRoomBtn">Create Room</button>
+                    <button class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900"
+                        onclick="sendCodeToServer()"><i class="bi bi-share-fill"></i></button>
+                </div>
+                <div class="ml-96 gap-x-2">
+                    <input
+                        class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md"
+                        type="text" id="joinRoomInput" placeholder="Enter Room ID">
+                    <button class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900"
+                        id="joinRoomBtn">Join Room</button>
+                </div>
+            </div>
+
+            <div class="editor-container">
+                <textarea type="text" id="editor" class="form-control"></textarea>
+            </div>
+            <br>
+            <h5 class="text-white"><u>PSEUDO-TERMINAL:</u></h5>
+            <br>
+            <div id="terminal"></div>
+        </div>
     </div>
-    <div class="editor-container">
-        <textarea type="text" id="editor" class="form-control"></textarea>
-    </div>
-    <br>
-    <h5 style="color: white;"><u>PSEUDO-TERMINAL:</u></h5>
-    <br>
-    <div id="terminal"></div>
-  </div>
-</div>
 </body>
 <script>
-    
-    const socket=io("http://ec2-3-215-68-245.compute-1.amazonaws.com:6501");
+    const socket=io("http://localhost:6501");
     const term=new Terminal();
     function createTerminal() {
       const terminalContainer = document.getElementById('terminal');
@@ -159,25 +182,6 @@
             reader.readAsText(file);
         }
     }
-
-    // Add a new function to handle saving code to local storage
-    function saveCodeLocally() {
-        const code = getCode();
-        const fileName = prompt('Enter a name for your file:');
-
-        if (!fileName || !code) {
-            alert('Please enter a valid file name and ensure there is code.');
-            return;
-        }
-
-        // Save the file to local storage
-        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || [];
-        savedFiles.push({ name: fileName, code });
-        localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
-
-        alert('Code saved successfully!');
-    }
-
 
     createTerminal();
 
@@ -262,25 +266,71 @@
         window.location.href="./dev.html";
     }
 
-    function createRoom(){
-      socket.emit("createRoom")
+    function showToast(message) {
+        // Create a div element for the toast
+        const toast = document.createElement('div');
+        toast.className = 'max-w-xs position-fixed top-20 left-[40%]';
+
+        // Create the inner HTML for the toast
+        toast.innerHTML = `
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+          <i class="bi bi-emoji-sunglasses-fill"></i>
+          <div class="m-lg-2">
+            ${message}
+          </div>
+        </div>
+        `;
+
+        // Append the toast to the body
+        document.body.appendChild(toast);
+
+        // Remove the toast after a certain duration (e.g., 5 seconds)
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 5000);
     }
 
-    function joinRoom(){
-      const roomId = document.getElementById('joinRoomInput').value
-      socket.emit("joinRoom",roomId)
+    let currentRoomId = '';
+
+    document.getElementById('createRoomBtn').addEventListener('click', () => {
+        socket.emit('createRoom');
+        socket.on('roomCreated', (roomId) => {
+            // Display the roomId in an alert
+            showToast(`Room created with RoomId: ${roomId}`)
+        });
+    });
+
+    // Function to join a room
+    document.getElementById('joinRoomBtn').addEventListener('click', () => {
+        const roomId = document.getElementById('joinRoomInput').value;
+        socket.emit('joinRoom', roomId);
+        // Set currentRoomId when joining a room
+        currentRoomId = roomId;
+        showToast(`Room joined: ${roomId}`)
+    });
+
+    // Function to handle room creation
+    socket.on('roomCreated', (roomId) => {
+        // Handle room creation event
+        console.log(`Room created with ID: ${roomId}`);
+        // Set currentRoomId when a room is created
+        currentRoomId = roomId;
+    });
+
+    function sendCodeToServer() {
+        const code = getCode();
+        // Ensure currentRoomId is defined before sending code to the server
+        if (currentRoomId) {
+            socket.emit('updateCode', { roomId: currentRoomId, code });
+        } else {
+            console.error('No room ID available. Unable to send code.');
+        }
     }
-
-    document.getElementById("createRoomBtn").addEventListener("click", createRoom);
-    document.getElementById("joinRoomBtn").addEventListener("click", joinRoom);
-
-    socket.on("roomCreated", roomId => {
-      console.log("Room created-",roomId);
-    })
-
-    socket.on("codeUpdate", code =>{
-      editor.setValue(code);
-    })
-
+    
+    // Listen for code updates from the server and update the editor
+    socket.on('codeUpdated', ({ code }) => {
+        editor.setValue(code);
+    });
 </script>
+
 </html>
