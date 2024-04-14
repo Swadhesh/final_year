@@ -71,7 +71,7 @@ app.post('/run-mean', (req, res) => {
   // Step 2: Create Dockerfiles for client and server subfolders
   const createDockerfile = (folderPath, imageName, exposePort) => {
 const dockerfileContent = `
-FROM node:14-alpine
+FROM node:20-alpine3.18
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
