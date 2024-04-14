@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
       socket.emit('output', 'Internal Server Error');
     }
   });
-  
+
   // Event handler for creating a room
   socket.on('createRoom', () => {
     const roomId = generateRoomId();
@@ -83,19 +83,26 @@ io.on('connection', (socket) => {
   });
  
   // Event handler for joining a room
+  // Event handler for joining a room
   socket.on('joinRoom', (roomId) => {
-    socket.join(roomId);
-    if (!rooms[roomId]) {
-      rooms[roomId] = [];
+    if (rooms[roomId]) {
+      socket.join(roomId);
+      rooms[roomId].push(socket);
+      console.log(rooms);
+      console.log(`User joined room ${roomId}`);
+      socket.emit('roomJoined', { roomId, success: true }); // Emit success message
+    } else {
+      console.log(`Room ${roomId} does not exist`);
+      socket.emit('roomJoined', { roomId, success: false }); // Emit failure message
     }
-    rooms[roomId].push(socket);
-    console.log(rooms);
-    console.log(`User joined room ${roomId}`);
   });
 
+
   socket.on('updateCode', ({ roomId, code }) => {
-    socket.to(roomId).emit('codeUpdated', { code });  
-  });
+    // Broadcast the updated code to all clients in the room except the sender
+    socket.broadcast.to(roomId).emit('codeUpdated', { code });
+});
+
 
   socket.on("disconnect", () => {
     console.log("A user disconnected");

@@ -164,7 +164,7 @@ services:
     build:
       context: ./Frontend
     ports:
-      - "80:80" # Map NGINX container port to port 80 on host
+      - "80:80" 
   server:
     build:
       context: ./Backend

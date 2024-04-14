@@ -109,7 +109,9 @@
                         type="text" id="joinRoomInput" placeholder="Enter Room ID">
                     <button class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold p-3 rounded-md hover:from-fuchsia-600 hover:to-fuchsia-900"
                         id="joinRoomBtn">Join Room</button>
+                        <div id="roomIndicator" class="text-white"></div>
                 </div>
+                
             </div>
 
             <div class="editor-container">
@@ -297,6 +299,8 @@
         socket.on('roomCreated', (roomId) => {
             // Display the roomId in an alert
             showToast(`Room created with RoomId: ${roomId}`)
+            currentRoomId = roomId;
+            updateRoomIndicator();
         });
     });
 
@@ -304,9 +308,16 @@
     document.getElementById('joinRoomBtn').addEventListener('click', () => {
         const roomId = document.getElementById('joinRoomInput').value;
         socket.emit('joinRoom', roomId);
-        // Set currentRoomId when joining a room
-        currentRoomId = roomId;
-        showToast(`Room joined: ${roomId}`)
+        socket.on('roomJoined', ({ roomId, success }) => {
+        if (success) {
+            // Set currentRoomId when joining a room
+            currentRoomId = roomId;
+            showToast(`Room joined: ${roomId}`);
+            updateRoomIndicator();
+        } else {
+            showToast('Room does not exist');
+        }
+        });
     });
 
     // Function to handle room creation
@@ -316,6 +327,33 @@
         // Set currentRoomId when a room is created
         currentRoomId = roomId;
     });
+    let isTyping = false; // Flag to indicate if the user is typing
+
+    editor.on('change', function(cm, change) {
+      // Check if the change was triggered by the user
+      if (!change.origin || change.origin !== 'setValue') {
+          isTyping = true; // Set isTyping flag to true when the user starts typing
+          sendUpdatedCodeToServer();
+      }
+    });
+
+    function updateRoomIndicator() {
+        const roomIndicator = document.getElementById('roomIndicator');
+        if (currentRoomId) {
+            roomIndicator.innerText = `Currently in Room: ${currentRoomId}`;
+        } else {
+            roomIndicator.innerText = 'Not currently in any room';
+        }
+    }
+    updateRoomIndicator();
+
+    function sendUpdatedCodeToServer() {
+        const code = getCode();
+        if (currentRoomId && isTyping) { // Only send updates if the user is typing
+            socket.emit('updateCode', { roomId: currentRoomId, code });
+            isTyping = false; // Reset the isTyping flag after sending the update
+        }
+    }
 
     function sendCodeToServer() {
         const code = getCode();
