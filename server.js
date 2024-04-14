@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
       rooms[roomId] = [];
     }
     rooms[roomId].push(socket);
-    console.log(rooms);
+    // console.log(rooms);
     console.log(`User created and joined room ${roomId}`);
   });
  
@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
     if (rooms[roomId]) {
       socket.join(roomId);
       rooms[roomId].push(socket);
-      console.log(rooms);
+      // console.log(rooms);
       console.log(`User joined room ${roomId}`);
       socket.emit('roomJoined', { roomId, success: true }); // Emit success message
     } else {
